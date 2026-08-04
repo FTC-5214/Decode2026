@@ -7,15 +7,14 @@ import com.pedropathing.ivy.behaviors.EndCondition;
 import com.pedropathing.ivy.behaviors.InterruptedBehavior;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.HelperClasses.PIDController;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 
 import java.util.Set;
 
-public class runIntake implements Command {
+public class RunIntake implements Command {
     private final Intake intake;
     private final Gamepad driverController;
-    public runIntake(Intake intake, Gamepad driverController) {
+    public RunIntake(Intake intake, Gamepad driverController) {
         this.intake = intake;
         this.driverController = driverController;
     }

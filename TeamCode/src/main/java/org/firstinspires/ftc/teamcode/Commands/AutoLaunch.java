@@ -13,11 +13,15 @@ import org.firstinspires.ftc.teamcode.Constants;
 
 import java.util.Set;
 
-public class runCatapult implements Command {
+public class AutoLaunch implements Command {
     private final Catapult catapult;
     private final PIDController pid;
     private final Gamepad driverController;
-    public runCatapult(Catapult catapult, Gamepad driverController) {
+
+    private boolean launching = false;
+    private boolean launched = false;
+    private boolean returned = false;
+    public AutoLaunch(Catapult catapult, Gamepad driverController) {
         this.catapult = catapult;
         this.pid = new PIDController(Constants.catapult_kp, Constants.catapult_ki, Constants.catapult_kd);
         this.driverController = driverController;
@@ -30,19 +34,28 @@ public class runCatapult implements Command {
 
     @Override
     public void execute() {
-        if (driverController.right_trigger_pressed) {
-            pid.setTarget(Constants.catapultLaunchSetpoint);
-        }
-        else {
-            pid.setTarget(Constants.catapultReturnSetpoint);
+        double target = launching ? Constants.catapultLaunchSetpoint : Constants.catapultReturnSetpoint;
+        boolean atTarget = Math.abs(catapult.getPosition() - target) < Constants.catapultSetpointTolerance;
+        returned = Math.abs(catapult.getPosition() - Constants.catapultReturnSetpoint) < Constants.catapultSetpointTolerance;
+
+        if (atTarget) {
+            if (launching) {
+                launched = true;
+                launching = false;
+
+            }
+            else {
+                launching = true;
+            }
         }
 
+        pid.setTarget(target);
         catapult.setPower(pid.calculate(catapult.getPosition()));
     }
 
     @Override
     public boolean done() {
-        return false;
+        return (launched && returned);
     }
 
     @Override
