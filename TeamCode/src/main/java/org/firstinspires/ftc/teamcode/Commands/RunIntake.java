@@ -43,7 +43,7 @@ public class RunIntake implements Command {
     }
 
     @Override
-    public void end(EndCondition endCondtion) {
+    public void end(EndCondition endCondition) {
         intake.stop();
     }
 

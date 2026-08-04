@@ -6,7 +6,6 @@ import com.pedropathing.ivy.behaviors.ConflictBehavior;
 import com.pedropathing.ivy.behaviors.EndCondition;
 import com.pedropathing.ivy.behaviors.InterruptedBehavior;
 
-import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 
 import java.util.Set;

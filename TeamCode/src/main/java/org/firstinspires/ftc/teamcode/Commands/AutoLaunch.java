@@ -5,7 +5,6 @@ import com.pedropathing.ivy.behaviors.BlockedBehavior;
 import com.pedropathing.ivy.behaviors.ConflictBehavior;
 import com.pedropathing.ivy.behaviors.EndCondition;
 import com.pedropathing.ivy.behaviors.InterruptedBehavior;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.HelperClasses.PIDController;
 import org.firstinspires.ftc.teamcode.Subsystems.Catapult;
@@ -40,7 +39,6 @@ public class AutoLaunch implements Command {
             if (launching) {
                 launched = true;
                 launching = false;
-
             }
             else {
                 launching = true;
