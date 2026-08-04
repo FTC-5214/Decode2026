@@ -16,15 +16,13 @@ import java.util.Set;
 public class AutoLaunch implements Command {
     private final Catapult catapult;
     private final PIDController pid;
-    private final Gamepad driverController;
 
     private boolean launching = false;
     private boolean launched = false;
     private boolean returned = false;
-    public AutoLaunch(Catapult catapult, Gamepad driverController) {
+    public AutoLaunch(Catapult catapult) {
         this.catapult = catapult;
         this.pid = new PIDController(Constants.catapult_kp, Constants.catapult_ki, Constants.catapult_kd);
-        this.driverController = driverController;
     }
 
     @Override
@@ -73,7 +71,7 @@ public class AutoLaunch implements Command {
     }
     @Override
     public InterruptedBehavior interruptedBehavior() {
-        return InterruptedBehavior.SUSPEND;
+        return InterruptedBehavior.END;
     }
     @Override
     public BlockedBehavior blockedBehavior() {
