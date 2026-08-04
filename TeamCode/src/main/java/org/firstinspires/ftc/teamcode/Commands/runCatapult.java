@@ -37,7 +37,7 @@ public class runCatapult implements Command {
             pid.setTarget(Constants.catapultReturnSetpoint);
         }
 
-        catapult.setPower(pid.calculate(catapult.getPostiion()));
+        catapult.setPower(pid.calculate(catapult.getPosition()));
     }
 
     @Override
@@ -60,7 +60,7 @@ public class runCatapult implements Command {
     }
     @Override
     public InterruptedBehavior interruptedBehavior() {
-        return InterruptedBehavior.END;
+        return InterruptedBehavior.SUSPEND;
     }
     @Override
     public BlockedBehavior blockedBehavior() {
