@@ -16,7 +16,11 @@ public class Intake {
     }
 
     public void intakeArtifact() {
-        intakeMotor.setPower(1);
+        intakeMotor.setPower(0.7);
+    }
+
+    public void intakeArtifactSlow() {
+        intakeMotor.setPower(0.6);
     }
     public void stop() {
         intakeMotor.setPower(0);

@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.behaviors.BlockedBehavior;
 import com.pedropathing.ivy.behaviors.ConflictBehavior;
 import com.pedropathing.ivy.behaviors.EndCondition;
 import com.pedropathing.ivy.behaviors.InterruptedBehavior;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.HelperClasses.PIDController;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.HelperClasses.PIDFController;
 import org.firstinspires.ftc.teamcode.Subsystems.Catapult;
 import org.firstinspires.ftc.teamcode.Constants;
 
@@ -14,44 +18,46 @@ import java.util.Set;
 
 public class AutoLaunch implements Command {
     private final Catapult catapult;
-    private final PIDController pid;
-
-    private boolean launching = false;
-    private boolean launched = false;
-    private boolean returned = false;
+    private final ElapsedTime timer = new ElapsedTime();
+    private double last_time = 0, launch_last_time;
+    private boolean done = false;
     public AutoLaunch(Catapult catapult) {
         this.catapult = catapult;
-        this.pid = new PIDController(Constants.catapult_kp, Constants.catapult_ki, Constants.catapult_kd);
     }
 
     @Override
     public void start() {
-        pid.setTarget(Constants.catapultReturnSetpoint);
+        done = false;
+        timer.reset();
+        launch_last_time = timer.seconds();
     }
 
     @Override
     public void execute() {
-        double target = launching ? Constants.catapultLaunchSetpoint : Constants.catapultReturnSetpoint;
-        boolean atTarget = Math.abs(catapult.getPosition() - target) < Constants.catapultSetpointTolerance;
-        returned = Math.abs(catapult.getPosition() - Constants.catapultReturnSetpoint) < Constants.catapultSetpointTolerance;
-
-        if (atTarget) {
-            if (launching) {
-                launched = true;
-                launching = false;
+        if ((timer.seconds() - launch_last_time) < 1.0) {
+            catapult.setPower(1);
+            last_time = timer.seconds();
+        }
+        else {
+            if (catapult.getPosition() > 10) {
+                if (timer.seconds() - last_time > 5) {
+                    //prevents motor from stalling and consuming all our power if it can't pull down the catapult
+                    catapult.setPower(0);
+                }
+                else {
+                    catapult.setPower(-1);
+                }
             }
             else {
-                launching = true;
+                catapult.setPower(0);
+                done = true;
             }
         }
-
-        pid.setTarget(target);
-        catapult.setPower(pid.calculate(catapult.getPosition()));
     }
 
     @Override
     public boolean done() {
-        return (launched && returned);
+        return done;
     }
 
     @Override
@@ -69,7 +75,7 @@ public class AutoLaunch implements Command {
     }
     @Override
     public InterruptedBehavior interruptedBehavior() {
-        return InterruptedBehavior.END;
+        return InterruptedBehavior.SUSPEND;
     }
     @Override
     public BlockedBehavior blockedBehavior() {

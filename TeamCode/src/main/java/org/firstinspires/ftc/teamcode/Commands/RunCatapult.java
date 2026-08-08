@@ -6,8 +6,10 @@ import com.pedropathing.ivy.behaviors.ConflictBehavior;
 import com.pedropathing.ivy.behaviors.EndCondition;
 import com.pedropathing.ivy.behaviors.InterruptedBehavior;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.HelperClasses.PIDController;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.HelperClasses.PIDFController;
 import org.firstinspires.ftc.teamcode.Subsystems.Catapult;
 import org.firstinspires.ftc.teamcode.Constants;
 
@@ -15,29 +17,50 @@ import java.util.Set;
 
 public class RunCatapult implements Command {
     private final Catapult catapult;
-    private final PIDController pid;
+    private final PIDFController launchPid;
+    private final PIDFController returnPid;
     private final Gamepad driverController;
-    public RunCatapult(Catapult catapult, Gamepad driverController) {
+
+    private final Telemetry telemetry;
+    private final ElapsedTime timer = new ElapsedTime();
+    private double last_time = 0;
+    public RunCatapult(Catapult catapult, Gamepad driverController, Telemetry telemetry) {
+        this.telemetry = telemetry;
         this.catapult = catapult;
-        this.pid = new PIDController(Constants.catapult_kp, Constants.catapult_ki, Constants.catapult_kd);
+        this.launchPid = new PIDFController(Constants.catapultLaunch_kp, Constants.catapultLaunch_ki, Constants.catapultLaunch_kd, Constants.catapultLaunch_kf);
+        this.returnPid = new PIDFController(Constants.catapultReturn_kp, Constants.catapultReturn_ki, Constants.catapultReturn_kd, Constants.catapultReturn_kf);
         this.driverController = driverController;
     }
 
     @Override
     public void start() {
-        pid.setTarget(Constants.catapultReturnSetpoint);
+        launchPid.setTarget(Constants.catapultLaunchSetpoint);
+        returnPid.setTarget(Constants.catapultReturnSetpoint);
     }
 
     @Override
     public void execute() {
-        if (driverController.right_trigger_pressed) {
-            pid.setTarget(Constants.catapultLaunchSetpoint);
+        if (driverController.right_trigger > 0) {
+            catapult.setPower(1);
+            last_time = timer.seconds();
         }
         else {
-            pid.setTarget(Constants.catapultReturnSetpoint);
+            if (catapult.getPosition() > 10) {
+                if (timer.seconds() - last_time > 5) {
+                    //prevents motor from stalling and consuming all our power if it can't pull down the catapult
+                    catapult.setPower(0);
+                }
+                else {
+                    catapult.setPower(-1);
+                }
+            }
+            else {
+                catapult.setPower(0);
+                //catapult.setPower(returnPid.calculate(catapult.getPosition()));
+            }
         }
 
-        catapult.setPower(pid.calculate(catapult.getPosition()));
+        telemetry.addData("position:", catapult.getPosition());
     }
 
     @Override

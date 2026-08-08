@@ -7,6 +7,7 @@ import com.pedropathing.ivy.behaviors.EndCondition;
 import com.pedropathing.ivy.behaviors.InterruptedBehavior;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 
 import java.util.Set;
@@ -14,9 +15,11 @@ import java.util.Set;
 public class RunIntake implements Command {
     private final Intake intake;
     private final Gamepad driverController;
-    public RunIntake(Intake intake, Gamepad driverController) {
+    private Telemetry telemetry;
+    public RunIntake(Intake intake, Gamepad driverController, Telemetry telemetry) {
         this.intake = intake;
         this.driverController = driverController;
+        this.telemetry = telemetry;
     }
 
     @Override
@@ -26,7 +29,8 @@ public class RunIntake implements Command {
 
     @Override
     public void execute() {
-        if (driverController.left_trigger_pressed) {
+        if (driverController.left_trigger > 0) {
+            telemetry.addLine("Intake Running");
             intake.intakeArtifact();
         }
         else if (driverController.left_bumper) {

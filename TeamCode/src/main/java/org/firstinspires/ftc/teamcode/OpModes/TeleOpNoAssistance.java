@@ -30,11 +30,14 @@ public class TeleOpNoAssistance extends OpMode {
     private Catapult catapultSubsystem;
     private Intake intakeSubsystem;
 
+    private boolean automatedDrive = false;
+
     //Motors
     private DcMotor leftCatapultMotor, rightCatapultMotor, intakeMotor;
 
     //Commands
     private Command runCatapult, runIntake;
+    private boolean isRobotCentric = false;
 
     @Override
     public void init() {
@@ -52,19 +55,54 @@ public class TeleOpNoAssistance extends OpMode {
         intakeSubsystem = new Intake(intakeMotor);
 
         //Commands
-        runCatapult = new RunCatapult(catapultSubsystem, gamepad1);
-        runIntake = new RunIntake(intakeSubsystem, gamepad1);
+        runCatapult = new RunCatapult(catapultSubsystem, gamepad1, telemetry);
+        runIntake = new RunIntake(intakeSubsystem, gamepad1, telemetry);
     }
 
     @Override
     public void start() {
         follower.startTeleOpDrive(true);
-        Scheduler.schedule(runCatapult, runIntake);
+        runCatapult.schedule();
+        runIntake.schedule();
     }
 
     @Override
     public void loop() {
         follower.update();
         Scheduler.execute();
+        telemetry.addData("Is robot centric?", isRobotCentric);
+        if (gamepad1.aWasPressed()) {
+            isRobotCentric = !isRobotCentric;
+        }
+
+        if (!automatedDrive) {
+            if (Storage.alliance == "Blue") {
+                if (!isRobotCentric) {
+                    follower.setTeleOpDrive(
+                            gamepad1.left_stick_y,
+                            gamepad1.left_stick_x,
+                            -gamepad1.right_stick_x,
+                            isRobotCentric
+                    );
+                }
+                else {
+                    follower.setTeleOpDrive(
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x,
+                            -gamepad1.right_stick_x,
+                            isRobotCentric
+                    );
+                }
+            }
+            else {
+                follower.setTeleOpDrive(
+                        -gamepad1.left_stick_y,
+                        -gamepad1.left_stick_x,
+                        -gamepad1.right_stick_x,
+                        isRobotCentric
+                );
+            }
+        }
+
     }
 }

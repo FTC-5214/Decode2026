@@ -30,7 +30,7 @@ public class CatapultTest extends OpMode {
     private DcMotor leftCatapultMotor, rightCatapultMotor;
 
     //Commands
-    private Command runCatapult, runIntake;
+    private Command runCatapult;
 
     @Override
     public void init() {
@@ -40,16 +40,19 @@ public class CatapultTest extends OpMode {
         catapultSubsystem = new Catapult(leftCatapultMotor, rightCatapultMotor);
 
         //Commands
-        runCatapult = new RunCatapult(catapultSubsystem, gamepad1);
+        runCatapult = new RunCatapult(catapultSubsystem, gamepad1, telemetry);
     }
 
     @Override
     public void start() {
-        Scheduler.schedule(runCatapult, runIntake);
+        Scheduler.schedule(runCatapult);
     }
 
     @Override
     public void loop() {
+        telemetry.clear();
         Scheduler.execute();
+        telemetry.addData("catapult value:", catapultSubsystem.getEncoderValue());
+        telemetry.addData("catapult command is running:", Scheduler.isScheduled(runCatapult));
     }
 }

@@ -18,7 +18,7 @@ public class AutoIntake implements Command {
 
     @Override
     public void start() {
-        intake.intakeArtifact();
+        intake.intakeArtifactSlow();
     }
 
     @Override

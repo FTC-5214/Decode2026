@@ -2,14 +2,17 @@ package org.firstinspires.ftc.teamcode.HelperClasses;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class PIDController {
-    private double kp, ki, kd, target, lastError = 0, integralSum = 0;
-    private ElapsedTime timer;
+public class PIDFController {
+    private double kp, ki, kd, kf, target, lastError = 0, integralSum = 0;
+    private final ElapsedTime timer;
 
-    public PIDController(double kp, double ki, double kd) {
+    public PIDFController(double kp, double ki, double kd, double kf) {
         this.kp = kp;
         this.ki = ki;
         this.kd = kd;
+        this.kf = kf;
+
+        timer = new ElapsedTime();
     }
 
     public void setTarget(double target) {
@@ -26,6 +29,6 @@ public class PIDController {
         double derivative = (error - lastError) / dt;
         lastError = error;
 
-        return (kp * error) + (ki * integralSum) + (kd * derivative);
+        return (kp * error) + (ki * integralSum) + (kd * derivative) + kf;
     }
 }
