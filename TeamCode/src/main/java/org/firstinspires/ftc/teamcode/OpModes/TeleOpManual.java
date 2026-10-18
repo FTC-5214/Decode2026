@@ -1,12 +1,9 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-import com.bylazar.telemetry.PanelsTelemetry;
-import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
-import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -18,10 +15,8 @@ import org.firstinspires.ftc.teamcode.Subsystems.Catapult;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-import java.util.function.Supplier;
-
 @TeleOp
-public class TeleOpNoAssistance extends OpMode {
+public class TeleOpManual extends OpMode {
     //Drivetrain
     private Follower follower;
     public static Pose startingPose = Storage.currentPose;
@@ -42,6 +37,7 @@ public class TeleOpNoAssistance extends OpMode {
     @Override
     public void init() {
         follower = Constants.createFollower(hardwareMap);
+        startingPose = Storage.currentPose;
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
         follower.update();
 
@@ -76,7 +72,7 @@ public class TeleOpNoAssistance extends OpMode {
         }
 
         if (!automatedDrive) {
-            if (Storage.alliance == "Blue") {
+            if (Storage.alliance.equals("Blue")) {
                 if (!isRobotCentric) {
                     follower.setTeleOpDrive(
                             gamepad1.left_stick_y,

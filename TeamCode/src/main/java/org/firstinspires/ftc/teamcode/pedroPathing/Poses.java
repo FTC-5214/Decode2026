@@ -2,10 +2,6 @@ package org.firstinspires.ftc.teamcode.pedroPathing;
 
 import com.pedropathing.geometry.Pose;
 
-import org.opencv.core.Mat;
-
-import java.nio.file.Path;
-
 public class Poses {
     public static Pose startPoseGoal = new Pose(34.749077490774916, 132.269, Math.toRadians(90));
     public static Pose startPoseFar = new Pose(56.21678966789668, 9, Math.toRadians(90));
@@ -27,5 +23,5 @@ public class Poses {
     public static Pose intakeSpike3Pose2 = new Pose(19, 35, Math.toRadians(180));
 
     public static Pose resetPose = new Pose(132.38929889298893, 9.305350553505548);
-    public static Pose endPose = new Pose(18.301642066420673, 91.69188191881919, 90);
+    public static Pose endPose = new Pose(18.301642066420673, 91.69188191881919, Math.toRadians(90));
 }

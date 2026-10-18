@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.behaviors.BlockedBehavior;
@@ -9,10 +8,7 @@ import com.pedropathing.ivy.behaviors.EndCondition;
 import com.pedropathing.ivy.behaviors.InterruptedBehavior;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.HelperClasses.PIDFController;
 import org.firstinspires.ftc.teamcode.Subsystems.Catapult;
-import org.firstinspires.ftc.teamcode.Constants;
 
 import java.util.Set;
 

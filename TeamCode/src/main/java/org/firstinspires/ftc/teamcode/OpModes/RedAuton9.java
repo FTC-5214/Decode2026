@@ -189,7 +189,7 @@ public class RedAuton9 extends OpMode {
                 follow(follower, launchToEnd)
         );
 
-        Storage.alliance = "Blue";
+        Storage.alliance = "Red";
     }
 
     @Override

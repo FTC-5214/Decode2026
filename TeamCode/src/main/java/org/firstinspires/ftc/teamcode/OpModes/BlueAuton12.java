@@ -105,11 +105,6 @@ public class BlueAuton12 extends OpMode {
                 .setLinearHeadingInterpolation(Poses.launchPose.getHeading(), Poses.intakeSpike3Pose1.getHeading())
                 .build();
 
-        spikeStrip3ToLaunch = follower.pathBuilder()
-                .addPath(new BezierLine(Poses.intakeSpike3Pose1, Poses.intakeSpike3Pose2))
-                .setTangentHeadingInterpolation()
-                .build();
-
         intakeSpikeStrip3 = follower.pathBuilder()
                 .addPath(new BezierLine(Poses.intakeSpike3Pose1, Poses.intakeSpike3Pose2))
                 .setTangentHeadingInterpolation()

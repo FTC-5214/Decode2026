@@ -87,7 +87,7 @@ public class TeleOpMain extends OpMode {
         //auto-align for launch
         if (gamepad1.bWasPressed()) {
             automatedDrive = true;
-            if (Storage.alliance == "Red") {
+            if (Storage.alliance.equals("Red")) {
                 toLaunch = follower.pathBuilder()
                         .addPath(new BezierLine(follower.getPose(), Poses.launchPose.mirror()))
                         .setHeadingInterpolation(HeadingInterpolator.linear(follower.getHeading(), Poses.launchPose.mirror().getHeading()))
@@ -111,7 +111,7 @@ public class TeleOpMain extends OpMode {
         //auto human player intake
         if (gamepad1.xWasPressed()) {
             automatedDrive = true;
-            if (Storage.alliance == "Red") {
+            if (Storage.alliance.equals("Red")) {
                 toHumanStation = follower.pathBuilder()
                         .addPath(new BezierLine(follower.getPose(), Poses.humanPlayerStation.mirror()))
                         .setHeadingInterpolation(HeadingInterpolator.linear(follower.getHeading(), Poses.humanPlayerStation.mirror().getHeading()))
@@ -135,7 +135,7 @@ public class TeleOpMain extends OpMode {
         //auto release ramp
         if (gamepad1.rightBumperWasPressed()) {
             automatedDrive = true;
-            if (Storage.alliance == "Red") {
+            if (Storage.alliance.equals("Red")) {
                 toGate = follower.pathBuilder()
                         .addPath(new BezierLine(follower.getPose(), Poses.gateState1.mirror()))
                         .setHeadingInterpolation(HeadingInterpolator.linear(follower.getHeading(), Poses.gateState1.mirror().getHeading()))
@@ -166,7 +166,7 @@ public class TeleOpMain extends OpMode {
         }
 
         if (!automatedDrive) {
-            if (Storage.alliance == "Blue") {
+            if (Storage.alliance.equals("Blue")) {
                 if (!isRobotCentric) {
                     follower.setTeleOpDrive(
                             gamepad1.left_stick_y,
@@ -204,7 +204,7 @@ public class TeleOpMain extends OpMode {
             }
 
             if (gamepad1.yWasPressed()) {
-                if (Storage.alliance == "Blue") {
+                if (Storage.alliance.equals("Blue")) {
                     follower.setPose(Poses.resetPose);
                 }
                 else {

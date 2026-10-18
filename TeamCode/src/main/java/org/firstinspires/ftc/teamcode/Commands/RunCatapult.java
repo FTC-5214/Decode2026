@@ -9,16 +9,11 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.HelperClasses.PIDFController;
 import org.firstinspires.ftc.teamcode.Subsystems.Catapult;
-import org.firstinspires.ftc.teamcode.Constants;
-
 import java.util.Set;
 
 public class RunCatapult implements Command {
     private final Catapult catapult;
-    private final PIDFController launchPid;
-    private final PIDFController returnPid;
     private final Gamepad driverController;
 
     private final Telemetry telemetry;
@@ -27,15 +22,12 @@ public class RunCatapult implements Command {
     public RunCatapult(Catapult catapult, Gamepad driverController, Telemetry telemetry) {
         this.telemetry = telemetry;
         this.catapult = catapult;
-        this.launchPid = new PIDFController(Constants.catapultLaunch_kp, Constants.catapultLaunch_ki, Constants.catapultLaunch_kd, Constants.catapultLaunch_kf);
-        this.returnPid = new PIDFController(Constants.catapultReturn_kp, Constants.catapultReturn_ki, Constants.catapultReturn_kd, Constants.catapultReturn_kf);
         this.driverController = driverController;
     }
 
     @Override
     public void start() {
-        launchPid.setTarget(Constants.catapultLaunchSetpoint);
-        returnPid.setTarget(Constants.catapultReturnSetpoint);
+
     }
 
     @Override
