@@ -194,6 +194,7 @@ public class TeleOpMain extends OpMode {
                     );
                 }
                 else {
+                    // Same as robot-centric for now; kept separate to mirror the Blue branch
                     follower.setTeleOpDrive(
                             -gamepad1.left_stick_y,
                             -gamepad1.left_stick_x,
